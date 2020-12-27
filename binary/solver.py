@@ -11,7 +11,9 @@ _index_helper = np.arange(9)
 def _dummy_fill(board: Board):
     """copy board and fill a dummy value into one cell"""
     # loop all unsolved cells
-    for row, col in np.argwhere(~board.solved):
+    not_solved = np.argwhere(~board.solved)
+    if len(not_solved) > 0:
+        row, col = not_solved[0]
         for i in _index_helper:
             # find next value to be tried
             next_num = utils.get_available_number(board[row, col], i)
@@ -70,25 +72,3 @@ def solve(sudoku_matrix: np.array):
     if result is None:
         return None  # return None when no solution found
     return result.decimal  # return result in decimal
-
-
-if __name__ == '__main__':
-    import time
-    test_matrix = np.array(
-        [[8, 0, 0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 3, 6, 0, 0, 0, 0, 0],
-         [0, 7, 0, 0, 9, 0, 2, 0, 0],
-         [0, 5, 0, 0, 0, 7, 0, 0, 0],
-         [0, 0, 0, 8, 4, 5, 7, 0, 0],
-         [0, 0, 0, 1, 0, 0, 0, 3, 0],
-         [0, 0, 1, 0, 0, 0, 0, 6, 8],
-         [0, 0, 8, 5, 0, 0, 0, 1, 0],
-         [0, 9, 0, 0, 0, 0, 4, 0, 0]]
-    )
-    res = None
-    s = time.time()
-    for _ in range(100):
-        res = solve(test_matrix)
-    e = time.time()
-    print(res)
-    print(f'Time elapsed: {round(e - s, 4)} sec')
